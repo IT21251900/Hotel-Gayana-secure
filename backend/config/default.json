@@ -8,12 +8,12 @@
   },
   "auth": {
     "accessToken": {
-      "issuer": "Team Ark",
+      "issuer": "Purple Software (Pvt) Ltd",
       "expiresIn": "1h",
-      "passphrase": "ark"
+      "passphrase": "purple"
     },
     "refreshToken": {
-      "issuer": "Team Ark",
+      "issuer": "Purple Software (Pvt) Ltd",
       "expiresIn": "30d",
       "secret": "7b44cccf4c67d31cf7ab852e8a06b529c3b1ec2ae431c158c0583e99a3361107",
       "errorMessage": "jwt expired"

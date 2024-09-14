@@ -21,7 +21,7 @@ const {
     validateUserPWResetTokenController,
 } = require('../controllers/admin.auth.controller');
 
-const publicKey = path.join(__dirname, '../../config/public.pem');
+const publicKey = path.join(__dirname, '../config/public.pem');
 const shield = new Shield(publicKey);
 
 const userAuthRouter = Router();
@@ -167,7 +167,7 @@ router.post('/validate-reset-password', validateUserPWResetTokenController);
 router.post('/reset-password', updateUserPasswordController);
 
 // Admin Management Routes
-router.post('/create', createUserController);
+router.post('/create', shield.auth(null, SETTINGS.USERS.ADMIN), createUserController);
 router.put('/update', shield.auth(null, SETTINGS.USERS.ADMIN), findOneAndUpdateUserController);
 router.get('/get-all', shield.auth(null, SETTINGS.USERS.ADMIN), findAllUsersController);
 router.post('/get-paged', shield.auth(null, SETTINGS.USERS.ADMIN), getPagedUsersController);

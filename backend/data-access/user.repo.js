@@ -20,26 +20,7 @@ const aggregateUserRepo = (filters) => {
     return User.aggregate([
         {
             $match: { ...filters },
-        },
-        {
-            $lookup: {
-                from: "roles",
-                localField: "role",
-                foreignField: "_id",
-                as: "role",
-            },
-        },
-        {
-            $unwind: { path: "$role" },
-        },
-        {
-            $lookup: {
-                from: "permissions",
-                localField: "role.permissions",
-                foreignField: "_id",
-                as: "role.permissions",
-            },
-        },
+        }
     ]).exec();
 };
 
