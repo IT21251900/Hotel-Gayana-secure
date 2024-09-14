@@ -22,6 +22,8 @@
       "time": 10,
       "unit": "minutes"
     }
-  }
+  },
+
+  "frontEndUrl": "http://localhost:3000"
 }
 

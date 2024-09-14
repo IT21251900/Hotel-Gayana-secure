@@ -1,6 +1,30 @@
 const { Router } = require("express")
 const router = Router()
 
+const path = require('path');
+const { Shield } = require('../middleware/auth/shield');
+const { SETTINGS } = require('../constants/commons.settings');
+
+const {
+    changeUserPasswordController,
+    createUserController,
+    findAllUsersController,
+    findOneAndUpdateUserController,
+    findOneUserByIdController,
+    getPagedUsersController,
+    logoutUserController,
+    requestUserPWResetController,
+    resetUserPasswordController,
+    updateUserPasswordController,
+    userLoginController,
+    userRefreshTokenController,
+    validateUserPWResetTokenController,
+} = require('../controllers/admin.auth.controller');
+
+const publicKey = path.join(__dirname, '../../config/public.pem');
+const shield = new Shield(publicKey);
+
+const userAuthRouter = Router();
 //Ushan 
 const { getCategory, saveCategory, deleteCategory, updateCategory, getCategoryById } = require("../controllers/CategoryControllers")
 const { getitems, additem, updateItem, deleteItem, getItemById, updateItemquick } = require("../controllers/ItemControllers")
@@ -11,7 +35,7 @@ const { sendEmail } = require("../controllers/mail");
 //send mail
 router.post("/send-email", sendEmail);
 //admin router
-router.post('/admin/save', saveAdmin);
+router.post('/admin/save', createUserController);
 router.get('/admin/get', getAdmins);
 router.get('/admin/get/:id', getAdminByID);
 router.put('/admin/update/:id', updateAdmin);
@@ -130,5 +154,26 @@ router.get("/Employee/get/:id",getEmployeeById)
 router.post("/Employee/save",addEmployee)
 router.put("/Employee/update/:id",updateEmployee)
 router.delete("/Employee/delete/:id",deleteEmployee)
+
+// Login, Logout & Token Refresh Routes
+router.post('/login', userLoginController);
+router.post('/refresh-token', userRefreshTokenController);
+router.post('/logout', shield.auth(null, SETTINGS.USERS.ADMIN), logoutUserController);
+
+// Password Management Routes
+router.get('/admin-reset-password/:id', shield.auth(null, SETTINGS.USERS.ADMIN), resetUserPasswordController);
+router.post('/request-reset-password', requestUserPWResetController);
+router.post('/validate-reset-password', validateUserPWResetTokenController);
+router.post('/reset-password', updateUserPasswordController);
+
+// Admin Management Routes
+router.post('/create', createUserController);
+router.put('/update', shield.auth(null, SETTINGS.USERS.ADMIN), findOneAndUpdateUserController);
+router.get('/get-all', shield.auth(null, SETTINGS.USERS.ADMIN), findAllUsersController);
+router.post('/get-paged', shield.auth(null, SETTINGS.USERS.ADMIN), getPagedUsersController);
+router.get('/get-one/:id', shield.auth(null, SETTINGS.USERS.ADMIN), findOneUserByIdController);
+router.post('/change-password', shield.auth(null, SETTINGS.USERS.ADMIN), changeUserPasswordController);
+
+module.exports = { userAuthRouter };
 
 module.exports = router;
