@@ -234,7 +234,7 @@ const validateAndUpdateUserPwService = async (token, password) => {
 
     await Promise.all([
       passwordUpdateRepoCheck(user._id, password),
-      // findUserPwResetTokenAndDelete({ token }),
+      findUserPwResetTokenAndDelete({ token }),
     ]);
 
     await sendEmailService(
