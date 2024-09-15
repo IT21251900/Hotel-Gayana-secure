@@ -213,23 +213,15 @@ const validateUserPWResetTokenService = async (token) => {
   }
 };
 
-const validateAndUpdateUserPwService = async (token, password, userType) => {
+const validateAndUpdateUserPwService = async (token, password) => {
   try {
     const pwReset = await findUserPwResetToken({ token });
 
     let user;
-    switch (userType) {
-      case SETTINGS.USERS.ADMIN:
-        user = await findOneUserRepo({ _id: pwReset.user });
-        break;
-      case SETTINGS.USERS.CUSTOMER:
-        user = await findOneCustomerRepo({ _id: pwReset.user });
-        break;
-    }
-
+    user = await findOneUserRepo({ _id: pwReset.user });
     if (pwReset && user) {
       await Promise.all([
-        passwordUpdateRepoCheck(user._id, password, userType),
+        passwordUpdateRepoCheck(user._id, password),
         findUserPwResetTokenAndDelete({ token }),
       ]);
       await sendEmailService(

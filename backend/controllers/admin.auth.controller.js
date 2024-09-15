@@ -139,7 +139,7 @@ const updateUserPasswordController = async (req, res) => {
     log.info("Updating password");
     try {
         const { token, password } = req.body;
-        const data = await validateAndUpdateUserPwService(token, password, SETTINGS.USERS.ADMIN);
+        const data = await validateAndUpdateUserPwService(token, password);
         res.send(data);
         log.info("Password updated successfully");
     } catch (e) {
