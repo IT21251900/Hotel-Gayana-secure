@@ -266,9 +266,6 @@ const LoginComponent = () => {
                         <h1>LOG IN</h1>
                         <form onSubmit={onLogin}>
                           <div className="mb-4" style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label className="form-label" htmlFor="form2Example11" style={{ marginBottom: '0.5rem' }}>
-                              Email Address
-                            </label>
                             <input
                               type="email"
                               name="email"
@@ -280,9 +277,6 @@ const LoginComponent = () => {
                             />
                           </div>
                           <div className="mb-4" style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label className="form-label" htmlFor="form2Example22" style={{ marginBottom: '0.5rem' }}>
-                              Password
-                            </label>
                             <input
                               type={passwordVisible ? "text" : "password"}
                               name="password"
