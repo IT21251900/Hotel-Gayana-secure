@@ -143,7 +143,11 @@ const updateUserPasswordController = async (req, res) => {
         res.send(data);
         log.info("Password updated successfully");
     } catch (e) {
-        return res.status(400).send(e);
+        log.error("Password update failed", e);
+        return res.status(400).json({
+            done: false,
+            message: "An error occurred during the password reset process.",
+        });
     }
 };
 
