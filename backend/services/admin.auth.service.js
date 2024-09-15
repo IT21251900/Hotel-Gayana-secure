@@ -95,7 +95,7 @@ const resetUserPasswordService = async (id) => {
         name: user.firstname + " " + user.lastname,
         email: user.email,
         password,
-        url: `${config.get("frontEndUrl")}/auth/login`,
+        url: `${config.get("frontEndUrl")}/admin`,
       },
       user.email,
       "Password Reset"
@@ -235,7 +235,7 @@ const validateAndUpdateUserPwService = async (token, password, userType) => {
       await sendEmailService(
         SETTINGS.EMAIL.PASSWORD_CHANGED,
         {
-          url: `${config.get("frontEndUrl")}/auth/login`,
+          url: `${config.get("frontEndUrl")}/admin`,
           name: user.firstname + " " + user.lastname,
         },
         user.email,
