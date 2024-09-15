@@ -26,7 +26,10 @@ import Qualitycontrol from './component/Order/qualitycontrol';
 import HomeInventory from './component/Home/home';
 
 // Admin Router
-import Login from './component/Admin/login';
+import LoginComponent from './modules/auth/login/login.component';
+import ForgotPassword from './modules/auth/forgot-password/forgot.password.component';
+import { AuthProvider } from './modules/auth/services/auth.service';
+import ResetPassword from './modules/auth/reset-password/reset-password-component';
 import Register from './component/Admin/addAdmin';
 import ShowAdmin from './component/Admin/ShowAdmin';
 
@@ -94,9 +97,12 @@ import UpdateEmployee from './component/Employee/updateEmployee'
 export const App = () => {
   return (
     <Router>
+      <AuthProvider>
       <Routes>
-        <Route path='/admin' exact element={<Login />} />
+        <Route path='/admin' exact element={<LoginComponent />} />
+        <Route path='/forgot-password' exact element={< ForgotPassword/>} />
 
+        <Route path='auth/reset-password/:id' exact element={< ResetPassword/>} />
 
         {/* Admin Route */}
         <Route path='/admin/register/' exact element={<div><Register /><Sidenavbar /></div>} />
@@ -179,7 +185,10 @@ export const App = () => {
         <Route path="/Employee/add" element={<div><AddEmployee /><Sidenavbar /></div>} />
         <Route path="/Employee/update/:id" element={<div><UpdateEmployee /><Sidenavbar /></div>} />
 
+        
+
       </Routes>
+      </AuthProvider>
     </Router>
   );
 };
