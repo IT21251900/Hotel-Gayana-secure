@@ -46,6 +46,7 @@ const signInUserService = async (password, email, userType) => {
 const validateUser = async (password, user, userType) => {
   try {
     const result = await bcrypt.compare(password, user.password);
+    console.log("pw",user.password);
     if (!result) {
       throw {
         message: "Invalid User name or Password!",
@@ -216,41 +217,46 @@ const validateUserPWResetTokenService = async (token) => {
 const validateAndUpdateUserPwService = async (token, password) => {
   try {
     const pwReset = await findUserPwResetToken({ token });
-
-    let user;
-    user = await findOneUserRepo({ _id: pwReset.user });
-    if (pwReset && user) {
-      await Promise.all([
-        passwordUpdateRepoCheck(user._id, password),
-        findUserPwResetTokenAndDelete({ token }),
-      ]);
-      await sendEmailService(
-        SETTINGS.EMAIL.PASSWORD_CHANGED,
-        {
-          url: `${config.get("frontEndUrl")}/admin`,
-          name: user.firstname + " " + user.lastname,
-        },
-        user.email,
-        "Password reset successfully"
-      );
-      return { done: true, message: "Password reset successfully" };
-    } else {
+    if (!pwReset || (pwReset.expiresAt && pwReset.expiresAt < Date.now())) {
       return {
         done: false,
         message: "Password reset failed. Invalid or expired token.",
       };
     }
+
+    const user = await findOneUserRepo({ _id: pwReset.user });
+    if (!user) {
+      return {
+        done: false,
+        message: "User not found.",
+      };
+    }
+
+    await Promise.all([
+      passwordUpdateRepoCheck(user._id, password),
+      // findUserPwResetTokenAndDelete({ token }),
+    ]);
+
+    await sendEmailService(
+      SETTINGS.EMAIL.PASSWORD_CHANGED,
+      {
+        url: `${config.get("frontEndUrl")}/admin`,
+        name: user.firstname, // Avoid exposing the password
+      },
+      user.email,
+      "Password reset successfully"
+    );
+
+    return { done: true, message: "Password reset successfully" };
   } catch (e) {
     throw e;
   }
 };
 
-const passwordUpdateRepoCheck = (userId, password, userType) => {
-  switch (userType) {
-    case SETTINGS.USERS.ADMIN:
-    case SETTINGS.USERS.CUSTOMER:
+
+
+const passwordUpdateRepoCheck = (userId, password) => {
       return findOneAndUpdateUserRepo({ _id: userId }, { password });
-  }
 };
 
 const findAllUsersService = async (data) => {

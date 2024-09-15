@@ -26,15 +26,16 @@ const aggregateUserRepo = (filters) => {
 
 const findOneAndUpdateUserRepo = async (filters, data) => {
     if (data.password) {
-        if (validatePassword(data.password)) {
-            data.password = await hashPassword(data.password);
-        } else {
-            throw {
-                pwdValid: false,
-                message:
-                    "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one digit.",
-            };
-        }
+        data.password = await hashPassword(data.password);
+        // if (validatePassword(data.password)) {
+        //     data.password = await hashPassword(data.password);
+        // } else {
+        //     throw {
+        //         pwdValid: false,
+        //         message:
+        //             "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one digit.",
+        //     };
+        // }
     }
     return User.findOneAndUpdate(filters, { $set: { ...data } }, { new: true }).exec();
 };
