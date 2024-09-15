@@ -167,7 +167,7 @@ router.post('/validate-reset-password', validateUserPWResetTokenController);
 router.post('/reset-password', updateUserPasswordController);
 
 // Admin Management Routes
-router.post('/create', shield.auth(null, SETTINGS.USERS.ADMIN), createUserController);
+router.post('/create', createUserController);
 router.put('/update', shield.auth(null, SETTINGS.USERS.ADMIN), findOneAndUpdateUserController);
 router.get('/get-all', shield.auth(null, SETTINGS.USERS.ADMIN), findAllUsersController);
 router.post('/get-paged', shield.auth(null, SETTINGS.USERS.ADMIN), getPagedUsersController);

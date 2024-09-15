@@ -8,12 +8,12 @@
   },
   "auth": {
     "accessToken": {
-      "issuer": "Purple Software (Pvt) Ltd",
+      "issuer": "Team Ark - SLIIT",
       "expiresIn": "1h",
       "passphrase": "purple"
     },
     "refreshToken": {
-      "issuer": "Purple Software (Pvt) Ltd",
+      "issuer": "Team Ark - SLIIT",
       "expiresIn": "30d",
       "secret": "7b44cccf4c67d31cf7ab852e8a06b529c3b1ec2ae431c158c0583e99a3361107",
       "errorMessage": "jwt expired"
