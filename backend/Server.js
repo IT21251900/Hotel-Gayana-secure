@@ -1,13 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const config = require("./config/default.json");
-const routes = require("./routes/Route");
-const postRoutesmenu = require('./routes/menu');
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || config.server.port || 8000;
+const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors());
@@ -17,7 +14,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // MongoDB connection
 (async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL || config.db.path, {
+    await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -29,6 +26,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 })();
 
 // Routes
+const routes = require("./routes/Route");
+const postRoutesmenu = require('./routes/menu');
 app.use("/api", routes);
 app.use(postRoutesmenu);
 
