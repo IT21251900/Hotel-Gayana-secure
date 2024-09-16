@@ -6,8 +6,6 @@ const config = require("./config/default.json")
 const routes = require("./routes/Route")
 const postRoutesmenu = require('./routes/menu');
 
-
-
 const cors = require("cors")
 
 const app = express()
@@ -19,7 +17,7 @@ app.use(express.json())
 
 app.use(cors())
 
-
+ 
 mongoose.connect(config.db.path)
     .then(() => console.log('mongoDB Connected...'))
     .catch((err) => console.log(err))
