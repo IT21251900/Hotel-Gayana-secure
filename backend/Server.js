@@ -1,4 +1,5 @@
 const express = require("express")
+const session = require("express-session");
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose")
 require("dotenv").config()
@@ -16,6 +17,12 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(express.json())
+app.use(session({
+    secret: '+XqJcU38f7J1m7MBV8Fq2W5Q5e6uF4PqzUpZt9A9KCA=', 
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } 
+  }));
 
 app.use(cors())
 app.use(passport.initialize());
