@@ -41,7 +41,8 @@ const LoginComponent = () => {
 
     setBtnLoading(true);
     try {
-      await login(loginForm); // Call the login function from the hook
+      const result = await login(loginForm);
+      console.log(result); // Call the login function from the hook
       navigate("/adminHome/");
     } catch (e) {
       setActionMessage({

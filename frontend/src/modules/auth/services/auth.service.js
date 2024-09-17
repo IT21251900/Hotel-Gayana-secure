@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (payload) => {
     try {
       const response = await axios.post(`${SETTINGS.BASE_API}/api/login`, payload);
+      console.log(response)
       setSession(response.data);
     } catch (error) {
       throw error.response.data;
