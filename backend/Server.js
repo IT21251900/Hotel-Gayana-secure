@@ -14,6 +14,9 @@ const app = express()
 const PORT = config.server.port || 8000;
 const bodyParser = require('body-parser');
 
+const cookieSession = require('cookie-session');
+const googleSetup = require("./services/google.login");
+
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
@@ -25,7 +28,22 @@ app.use(session({
     cookie: { secure: false } 
   }));
 
-app.use(cors())
+app.use(
+	cookieSession({
+		name: "session",
+		keys: ["cyberwolve"],
+		maxAge: 24 * 60 * 60 * 100,
+	})
+);  
+
+app.use(
+	cors({
+		origin: "http://localhost:3000/admin",
+		methods: "GET,POST,PUT,DELETE",
+		credentials: true,
+	})
+);
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", authRoute);
