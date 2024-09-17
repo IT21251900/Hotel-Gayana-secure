@@ -1,11 +1,11 @@
 
 const express = require("express")
 const session = require("express-session");
-const bodyParser = require('body-parser');
 const mongoose = require("mongoose")
 require("dotenv").config()
 const config = require("./config/default.json")
 const routes = require("./routes/Route")
+const cors = require("cors")
 
 const postRoutesmenu = require('./routes/menu');
 const passport = require("passport");

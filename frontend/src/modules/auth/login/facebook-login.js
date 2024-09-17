@@ -18,9 +18,10 @@ const FacebookLoginButton = () => {
   return (
     <div>
       <FacebookLogin
-        appId="3797704980470064" // Replace with your Facebook App ID
+        appId="3797704980470064" 
         autoLoad={false}
         fields="name,email,picture"
+        icon = "fa-facebook"
         callback={responseFacebook}
         cssClass="facebook-login-button"
         textButton="Login with Facebook"
@@ -30,3 +31,5 @@ const FacebookLoginButton = () => {
 };
 
 export default FacebookLoginButton;
+
+
