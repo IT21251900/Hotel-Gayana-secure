@@ -75,7 +75,7 @@ function Sidenavbar() {
                     </div>
                     <a href="/adminHome/" className="dashboard-nav-item"><i className="fas fa-user"></i> Admin Details</a>
                     <div className="nav-item-divider"></div>
-                    <a href="/" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
+                    <a href="/admin" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
                 </nav>
             </div>
             <div className='dashboard-app'>
