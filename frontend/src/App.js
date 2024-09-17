@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Common component
 import Sidenavbar from './component/navbar/sidenavbar';
+import PrivacyPolicy from './modules/auth/login/privacy-policy'
 //import AdminFooter from './component/footerAdmin/footer'
 
 
@@ -107,6 +108,8 @@ export const App = () => {
         {/* Admin Route */}
         <Route path='/admin/register/' exact element={<div><Register /><Sidenavbar /></div>} />
         <Route path='/adminHome/' exact element={<div><ShowAdmin /><Sidenavbar /></div>} />
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
         {/* Homeinventory Route */}
         <Route path='/inventory/' exact element={<div><HomeInventory /><Sidenavbar /></div>} />
