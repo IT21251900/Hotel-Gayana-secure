@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/auth.service"; // Import the hook
+import FacebookLoginButton from "./facebook-login";
 
 const LoginComponent = () => {
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
@@ -25,13 +26,6 @@ const LoginComponent = () => {
       ...loginForm,
       [name]: value,
     });
-  };
-
-  const facebook = () => {
-    window.open(
-      "https://hotel-gayana-secure.vercel.app/auth/facebook/callback",
-      "_self"
-    );
   };
 
   const onLogin = async (e) => {
@@ -172,23 +166,7 @@ const LoginComponent = () => {
                             Forgot Your Password?
                           </button>
                         </div>
-                        <div className="mt-4 text-center">
-                          <button
-                            onClick={facebook}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "#4267b2", 
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                              padding: "0.5rem",
-                            }}
-                          >
-                            <i className="fab fa-facebook-f" style={{ marginRight: "0.5rem" }}></i>
-                            Login with Facebook
-                          </button>
-                        </div>
+                        <FacebookLoginButton></FacebookLoginButton>
                       </div>
                     </div>
                   </div>
