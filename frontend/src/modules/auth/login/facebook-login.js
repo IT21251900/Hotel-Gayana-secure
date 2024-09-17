@@ -9,7 +9,7 @@ const FacebookLoginButton = () => {
   const responseFacebook = (response) => {
     if (response.accessToken) {
       console.log('Login successful:', response);
-      navigate('https://hotel-gayana-secure.vercel.app/adminHome'); 
+      navigate('/adminHome'); 
     } else {
       console.log('Login failed:', response);
     }
