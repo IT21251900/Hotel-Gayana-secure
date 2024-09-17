@@ -8,12 +8,9 @@ const FacebookLoginButton = () => {
 
   const responseFacebook = (response) => {
     if (response.accessToken) {
-      // Handle successful login
-      // You may want to send the accessToken to your backend for further processing
       console.log('Login successful:', response);
-      navigate('/'); // Redirect to home or another page after login
+      navigate('https://hotel-gayana-secure.vercel.app/adminHome'); 
     } else {
-      // Handle login failure
       console.log('Login failed:', response);
     }
   };
