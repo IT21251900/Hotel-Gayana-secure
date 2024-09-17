@@ -6,20 +6,18 @@ const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
   const responseGoogle = (response) => {
-    console.log('Google response:', response); // Log the entire response for debugging
+    console.log('Google response:', response);
 
     if (response.profileObj) {
-      // Assuming profileObj is present if login is successful
       console.log('Login successful:', response);
-      navigate('/adminHome'); 
+      navigate('/adminHome');
     } else {
       console.log('Login failed:', response);
     }
   };
 
   const onError = (error) => {
-    console.error('Login error:', error); // Log detailed error response
-    // You can also show an error message to the user here
+    console.error('Login error:', error);
   };
 
   return (
@@ -28,9 +26,8 @@ const GoogleLoginButton = () => {
         clientId="911259510627-hpck0jrs9j8qv2ip416duu8n93sqk7em.apps.googleusercontent.com"
         buttonText="Login with Google"
         onSuccess={responseGoogle}
-        onError={onError} // Updated prop for error handling
+        onFailure={onError} 
         cookiePolicy={'single_host_origin'}
-        className="google-login-button"
       />
     </div>
   );

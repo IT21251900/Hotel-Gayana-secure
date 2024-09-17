@@ -32,9 +32,14 @@ app.use(
 	cookieSession({
 		name: "session",
 		keys: ["cyberwolve"],
-		maxAge: 24 * 60 * 60 * 100,
+		maxAge: 24 * 60 * 60 * 1000,
 	})
 );  
+
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  next();
+});
 
 app.use(
 	cors({
