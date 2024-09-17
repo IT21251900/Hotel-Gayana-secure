@@ -9,28 +9,8 @@ const FacebookLoginButton = () => {
   const responseFacebook = (response) => {
     if (response.status !== 'unknown') {
       setIsLoading(true);
-      fetch('/auth/facebook', { // Adjusted endpoint to match your backend route
-        method: 'GET', // Use GET as your backend is using passport.authenticate() with GET method
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // Include cookies with the request
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data", data);
-          setIsLoading(false);
-          if (data.success) {
-            navigate('/auth/facebook/success'); // Updated to use navigate hook
-          } else {
-            navigate('/auth/facebook/error'); // Updated to use navigate hook
-          }
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          console.error('Error logging in with Facebook:', error);
-          // Handle the error here, e.g., show an error message to the user
-        });
+      // Redirect to the backend Facebook route which handles authentication
+      window.location.href = `/auth/facebook`; // Redirect to backend for authentication
     } else {
       navigate('/auth/facebook/error'); // Updated to use navigate hook
     }
