@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+// FacebookLoginButton.js
+import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { useNavigate } from 'react-router-dom';
 
 const FacebookLoginButton = () => {
-  const navigate = useNavigate(); // Updated to use navigate hook
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const responseFacebook = (response) => {
-    if (response.status !== 'unknown') {
-      setIsLoading(true);
-      // Redirect to the backend Facebook route which handles authentication
-      window.location.href = `/auth/facebook`; // Redirect to backend for authentication
+    if (response.accessToken) {
+      // Handle successful login
+      // You may want to send the accessToken to your backend for further processing
+      console.log('Login successful:', response);
+      navigate('/'); // Redirect to home or another page after login
     } else {
-      navigate('/auth/facebook/error'); // Updated to use navigate hook
+      // Handle login failure
+      console.log('Login failed:', response);
     }
   };
 
   return (
-    <FacebookLogin
-      appId="3797704980470064"
-      autoLoad={false}
-      fields="name,email,picture"
-      callback={responseFacebook}
-      icon="fa-facebook"
-      textButton={isLoading ? 'Logging in...' : 'Login with Facebook'}
-    />
+    <div>
+      <FacebookLogin
+        appId="3797704980470064" // Replace with your Facebook App ID
+        autoLoad={false}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        cssClass="facebook-login-button"
+        textButton="Login with Facebook"
+      />
+    </div>
   );
 };
 
