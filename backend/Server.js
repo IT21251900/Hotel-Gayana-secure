@@ -15,7 +15,7 @@ const PORT = config.server.port || 8000;
 const bodyParser = require('body-parser');
 
 const cookieSession = require('cookie-session');
-const googleSetup = require("./services/google.login");
+const googleAuthRoute = require("./routes/google.route")
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -37,7 +37,8 @@ app.use(
 );  
 
 app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
   next();
 });
 
@@ -51,8 +52,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/auth", googleAuthRoute);
 app.use("/auth", authRoute);
-
 
 // MongoDB connection
 (async () => {

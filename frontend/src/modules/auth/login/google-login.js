@@ -10,7 +10,7 @@ const GoogleLoginButton = () => {
 
     if (response.profileObj) {
       console.log('Login successful:', response);
-      navigate('/adminHome');
+      navigate('/adminHome', { replace: true });
     } else {
       console.log('Login failed:', response);
     }
@@ -26,8 +26,11 @@ const GoogleLoginButton = () => {
         clientId="911259510627-hpck0jrs9j8qv2ip416duu8n93sqk7em.apps.googleusercontent.com"
         buttonText="Login with Google"
         onSuccess={responseGoogle}
-        onFailure={onError} 
+        onFailure={onError}
         cookiePolicy={'single_host_origin'}
+        accessType={'offline'}
+        prompt={'consent'}
+        uxMode="redirect"
       />
     </div>
   );
