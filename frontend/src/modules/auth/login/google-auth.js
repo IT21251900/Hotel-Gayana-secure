@@ -1,13 +1,15 @@
 import React from 'react';
+import { GoogleLogin } from 'react-google-login';
 import { useNavigate } from 'react-router-dom';
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
-  const handleGoogleLogin = (response) => {
-    if (response.accessToken) {
-      console.log('Login successful:', response);
-      navigate('/adminHome'); 
+  const responseGoogle = (response) => {
+    console.log(response);
+    if (response.profileObj) {
+      // Handle successful login here (e.g., save user info, navigate)
+      navigate('/adminHome');
     } else {
       console.log('Login failed:', response);
     }
@@ -15,9 +17,13 @@ const GoogleLoginButton = () => {
 
   return (
     <div>
-      <button onClick={handleGoogleLogin} className="google-login-button">
-        <i className="fa fa-google"></i> Login with Google
-      </button>
+      <GoogleLogin
+        clientId="151745723501-4bvv6nh2b8qptpt5noqb5i2sfvv3hq8n.apps.googleusercontent.com" 
+        buttonText="Login with Google"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
     </div>
   );
 };
