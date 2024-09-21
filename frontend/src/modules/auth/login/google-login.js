@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
+import { gapi } from "gapi-script";
 
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: "911259510627-hpck0jrs9j8qv2ip416duu8n93sqk7em.apps.googleusercontent.com",
+        scope: 'email',
+      });
+    }
+  
+    gapi.load('client:auth2', start);
+  }, []);
 
   const responseGoogle = (response) => {
     console.log('Google response:', response);
