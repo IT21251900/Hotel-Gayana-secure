@@ -3,7 +3,7 @@ import axios from "axios";
 import { search } from "../CommonJS/search.js";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-
+import DOMPurify from "dompurify";
 
 export default function Showmenu() {
   const [menu, setmenu] = useState([]);
@@ -159,7 +159,13 @@ export default function Showmenu() {
                       <td>
                         <center>{menuItem.price}</center>
                       </td>
-                      <td>{menuItem.description}</td>
+                      <td>
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(menuItem.description),
+                          }}
+                        />
+                      </td>
                       <td>
                         <a
                           className="btn btn-warning"
@@ -188,5 +194,3 @@ export default function Showmenu() {
     </div>
   );
 }
-
-
