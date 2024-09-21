@@ -23,7 +23,7 @@ const FacebookLoginButton = () => {
         fields="name,email,picture"
         icon = "fa-facebook"
         callback={responseFacebook}
-        cssClass="facebook-login-button"
+        cssClass=" fb-button"
         textButton="Login with Facebook"
       />
     </div>

@@ -60,35 +60,43 @@ const LoginComponent = () => {
       className="h-100 gradient-form"
       style={{ backgroundColor: "#eee" }}
     >
-      <div className="container py-5 h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-xl-10">
+      <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="row w-100">
+          <div class="col-xl-10 mx-auto">
             <div className="card rounded-3 text-black">
               <div className="row g-0">
                 {/* Left side with image */}
                 <div className="col-lg-6 d-none d-lg-block">
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                    alt="logo"
-                  />
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ height: "100%" }}
+                  >
+                    <img
+                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                      alt="logo"
+                    />
+                  </div>
                 </div>
+
                 {/* Right side with login form */}
-                <div className="col-lg-6">
+                <div className="col-lg-6 login-card">
                   <div className="card-body p-md-5 mx-md-4">
-                    <div className="text-center">
-                      <h4 className="mt-1 mb-5 pb-1">
-                        We are The Gayana Hotel Team
-                      </h4>
+                    <div className="">
                       <div className="login-container">
-                        <h1>LOG IN</h1>
+                        <h1 className="mb-4 " style={{ color: "#0d6efd" }}>
+                          Sign in
+                        </h1>
+                        <FacebookLoginButton></FacebookLoginButton>
+                        <GoogleLoginButton></GoogleLoginButton>
+                        <hr className="mt-2"></hr>
                         <form onSubmit={onLogin}>
                           <div
-                            className="mb-4"
+                            className="mb-3"
                             style={{ display: "flex", flexDirection: "column" }}
                           >
                             <input
@@ -101,13 +109,22 @@ const LoginComponent = () => {
                               style={{
                                 width: "100%",
                                 boxSizing: "border-box",
-                                padding: "0.5rem",
+                                padding: "0.75rem",
+                                borderRadius: "0.25rem",
+                                border: "1px solid #ced4da",
+                                fontSize: "1rem",
+                                backgroundColor: "#f9f9f9",
                               }}
                             />
                           </div>
                           <div
                             className="mb-4"
-                            style={{ display: "flex", flexDirection: "column" }}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              width: "100%",
+                            }}
                           >
                             <input
                               type={passwordVisible ? "text" : "password"}
@@ -116,27 +133,38 @@ const LoginComponent = () => {
                               onChange={handleInputChange}
                               placeholder="Password"
                               required
+                              className="form-control"
                               style={{
                                 width: "100%",
                                 boxSizing: "border-box",
-                                padding: "0.5rem",
+                                padding: "0.75rem",
+                                borderRadius: "0.25rem",
+                                border: "1px solid #ced4da",
+                                fontSize: "1rem",
+                                backgroundColor: "#f9f9f9",
                               }}
                             />
                             <button
                               type="button"
                               onClick={togglePasswordVisibility}
+                              className="btn"
                               style={{
                                 marginTop: "0.5rem",
+                                padding: "0.25rem 0.5rem",
                                 background: "none",
                                 border: "none",
                                 color: "#007bff",
+                                fontWeight: "bold",
                                 cursor: "pointer",
+                                alignSelf: "flex-end",
+                                fontSize: "0.9rem",
                               }}
                             >
                               {passwordVisible ? "Hide" : "Show"} Password
                             </button>
                           </div>
-                          <div className="text-center pt-1 mb-5 pb-1">
+
+                          <div className="text-center pt-1 mb-3 pb-1">
                             <button
                               className="btn btn-primary"
                               type="submit"
@@ -155,7 +183,7 @@ const LoginComponent = () => {
                             </div>
                           )}
                         </form>
-                        <div className="mt-4 text-center">
+                        <div className="">
                           <button
                             onClick={() => navigate("/forgot-password")}
                             style={{
@@ -168,8 +196,6 @@ const LoginComponent = () => {
                             Forgot Your Password?
                           </button>
                         </div>
-                        <FacebookLoginButton></FacebookLoginButton>
-                        <GoogleLoginButton></GoogleLoginButton>
                       </div>
                     </div>
                   </div>

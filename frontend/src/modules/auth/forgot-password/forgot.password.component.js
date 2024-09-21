@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Alert } from 'antd';
-import { MailOutlined } from '@ant-design/icons';
-import { ForgotResetPasswordService } from '../../../services/forgot-reset-password-service'; // Adjust path as necessary
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Alert } from "antd";
+import { MailOutlined } from "@ant-design/icons";
+import { ForgotResetPasswordService } from "../../../services/forgot-reset-password-service"; // Adjust path as necessary
 
 const ForgotPassword = () => {
   const [form] = Form.useForm();
   const [btnLoading, setBtnLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState(null);
   const navigate = useNavigate();
-  
+
   // Create an instance of the service
-  const forgotResetPasswordService = new ForgotResetPasswordService(/* pass http client here */);
+  const forgotResetPasswordService =
+    new ForgotResetPasswordService(/* pass http client here */);
 
   const navigateWithDelay = async () => {
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    navigate('/admin');
+    navigate("/admin");
   };
 
   const onFinish = async (values) => {
@@ -25,19 +26,19 @@ const ForgotPassword = () => {
 
       if (res.done) {
         setActionMessage({
-          type: 'success',
-          message: 'Password reset link has been sent to your email address.',
+          type: "success",
+          message: "Password reset link has been sent to your email address.",
         });
       } else {
         setActionMessage({
-          type: 'error',
-          message: res.message || 'Password reset failed. Please try again.',
+          type: "error",
+          message: res.message || "Password reset failed. Please try again.",
         });
       }
     } catch (e) {
       setActionMessage({
-        type: 'error',
-        message: e.message || 'Password reset failed. Please try again.',
+        type: "error",
+        message: e.message || "Password reset failed. Please try again.",
       });
     } finally {
       setBtnLoading(false);
@@ -46,55 +47,80 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="bg-[#F9FBFF]">
-      <div className="min-h-screen w-full flex flex-col justify-between">
-        <div className="my-auto 2xl:mt-32 mb-0 h-[60px]">
-          <img src="../../../../assets/img/logo.svg" className="w-full h-full object-contain" alt="Logo" />
-        </div>
-        <div className="w-[360px] mx-auto my-auto flex flex-col">
-          <h1 className="text-[1.5rem] mx-6 md:mx-0">Forgot Password</h1>
-          <p className="text-[0.875rem] text-[#64748B] mx-6 md:mx-0">Enter your email address to get the reset link</p>
-          <Form
-            form={form}
-            layout="vertical"
-            className="mt-6 mx-6 md:mx-0"
-            onFinish={onFinish}
+    <div
+      className="bg-light"
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        color: "#0d6efd"
+      }}
+    >
+      <div
+        className="w-100"
+        style={{
+          maxWidth: "360px",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <h1
+          className="text-center"
+          style={{ fontSize: "1.5rem", marginBottom: "1rem" }}
+        >
+          Forgot Password
+        </h1>
+        <p className="text-muted text-center" style={{ fontSize: "0.875rem" }}>
+          Enter your email address to get the reset link
+        </p>
+        <Form
+          form={form}
+          layout="vertical"
+          className="mx-auto"
+          style={{ width: "100%", marginTop: "1.5rem" }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please input your email!" },
+              { type: "email", message: "Invalid email address!" },
+            ]}
           >
-            <Form.Item
-              name="email"
-              rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Invalid email address!' }]}
-            >
-              <Input
-                prefix={<MailOutlined />}
-                placeholder="Email Address"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                block
-                loading={btnLoading}
-                htmlType="submit"
-                disabled={btnLoading}
-              >
-                <strong>Send Password Reset Link</strong>
-              </Button>
-            </Form.Item>
-          </Form>
-          {actionMessage && (
-            <Alert
-              className="mt-2 mx-6 md:mx-0"
-              type={actionMessage.type}
-              message={actionMessage.message}
-              showIcon
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="Email Address"
+              style={{
+                padding: "0.75rem",
+                borderRadius: "0.25rem",
+                border: "1px solid #ced4da",
+              }}
             />
-          )}
-        </div>
-        <div className="mb-8 mt-auto flex flex-col items-center justify-center">
-          <div className="h-[30px]">
-            <img src="../../../../assets/img/purple_logo.svg" className="w-full h-full object-contain" alt="Logo" />
-          </div>
-        </div>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              block
+              loading={btnLoading}
+              htmlType="submit"
+              disabled={btnLoading}
+              style={{ padding: "0.75rem" }}
+            >
+              <strong>Send Password Reset Link</strong>
+            </Button>
+          </Form.Item>
+        </Form>
+        {actionMessage && (
+          <Alert
+            className="mt-2"
+            type={actionMessage.type}
+            message={actionMessage.message}
+            showIcon
+            style={{ margin: "0 auto", maxWidth: "360px" }}
+          />
+        )}
       </div>
     </div>
   );
