@@ -7,8 +7,10 @@ const GoogleLoginButton = () => {
 
   const responseGoogle = (response) => {
     console.log(response);
-    if (response) {
-      navigate('/adminHome');
+    if (response.accessToken) {
+        console.log('Login successful:', response);
+        navigate('/adminHome'); 
+    //   navigate('/adminHome');
     } else {
       console.log('Login failed:', response);
     }
