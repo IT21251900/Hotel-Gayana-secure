@@ -48,12 +48,9 @@ export default function Showmenu() {
   };
 
   const generatePDF = () => {
-    // create new PDF document
     const doc = new jsPDF();
-    // set font size and style
     doc.setFontSize(24);
     doc.setFont("times", "bold");
-    // add content to the document
     doc.text("Hotel Gayana", doc.internal.pageSize.getWidth() / 2, 10, {
       align: "center",
     });
@@ -61,10 +58,11 @@ export default function Showmenu() {
     doc.setFont("helvetica", "normal");
     doc.text("All menu", 10, 30);
     doc.text(new Date().toLocaleString(), 10, 40, { fontSize: 10 });
-    // define table headers
+
     const headers = [
       [
         "#",
+        "id",
         "menuModel",
         "menu Dash Number",
         "Category",
@@ -72,23 +70,22 @@ export default function Showmenu() {
         "Description",
       ],
     ];
-    // iterate over Rooms and add them to the table
-    const data = menu.map((menu, index) => [
+
+    const data = menu.map((menuItem, index) => [
       index + 1,
-      menu._id,
-      menu.menuModel,
-      menu.menu,
-      menu.menucat,
-      menu.price,
-      menu.description,
+      menuItem._id,
+      menuItem.menuModel,
+      menuItem.menu,
+      menuItem.menucat,
+      menuItem.price,
+      DOMPurify.sanitize(menuItem.description), // Sanitize description
     ]);
-    // add the table to the document
+
     doc.autoTable({
       head: headers,
       body: data,
       startY: 50,
       didDrawPage: function (data) {
-        // add footer text
         doc.setFontSize(10);
         doc.text(
           "This is the footer",
@@ -97,7 +94,7 @@ export default function Showmenu() {
         );
       },
     });
-    // save the document
+
     doc.save("all_vehicles.pdf");
   };
 
