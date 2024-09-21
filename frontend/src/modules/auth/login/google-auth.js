@@ -6,7 +6,6 @@ const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
   const responseGoogle = (response) => {
-    console.log(response);
     if (response.profileObj) {
         console.log('Login successful:', response);
         navigate('/adminHome'); 
