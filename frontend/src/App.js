@@ -1,4 +1,6 @@
 import React from 'react';
+import {gapi} from 'gapi-script';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 // Common component
@@ -193,7 +195,17 @@ export const App = () => {
       </Routes>
       </AuthProvider>
     </Router>
+
+    
   );
 };
+
+gapi.load("client:auth2", () => {
+  gapi.client.init({
+    clientId:
+      "151745723501-5i3oinfp88ubll6f6rf3h4uj4ou7qmdr.apps.googleusercontent.com",
+    plugin_name: "chat",
+  });
+});
 
 export default App;
