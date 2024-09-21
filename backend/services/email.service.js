@@ -2,7 +2,6 @@ const ejs = require("ejs");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const path = require("path");
-const { SETTINGS } = require("../constants/commons.settings");
 
 const sendEmailService = async (type, data, to, subject, file) => {
     try {
@@ -16,13 +15,13 @@ const sendEmailService = async (type, data, to, subject, file) => {
         // Create a transporter for sending emails
         const transporter = nodemailer.createTransport({
             service: "Outlook365",
-            host: SETTINGS.EMAIL_CONFIG.host,
-            port: SETTINGS.EMAIL_CONFIG.port,
+            host: process.env.EMAIL_HOST,
+            port: Number(process.env.EMAIL_PORT),
             secure: false,
             requireTLS: true,
             auth: {
-                user: SETTINGS.EMAIL_CONFIG.username,
-                pass: SETTINGS.EMAIL_CONFIG.password,
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
         
@@ -37,7 +36,7 @@ const sendEmailService = async (type, data, to, subject, file) => {
         
         // Send the email
         await transporter.sendMail({
-            from: SETTINGS.EMAIL_CONFIG.username,
+            from: process.env.EMAIL_USERNAME,
             to, // List of receivers
             subject, // Subject line
             html: parsed,

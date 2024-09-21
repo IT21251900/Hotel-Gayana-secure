@@ -39,8 +39,8 @@ export default function ShowAdmin() {
                     <div className='dashboard-content'>
         <div className="mt-5">
             <h1>Show Admin Details</h1>
-            <button className='btn btn-success'>
-          <a href='/admin/register/' style={{textDecoration:'none',color:'white'}}>Add New Admin</a></button>
+            {/* <button className='btn btn-success'>
+          <a href='/admin/register/' style={{textDecoration:'none',color:'white'}}>Add New Admin</a></button> */}
           <br/>
           <br/>
             <br/>
@@ -51,19 +51,16 @@ export default function ShowAdmin() {
                         <th>#</th>
                         <th>Name </th>
                         <th>Email Address</th>
-                        <th>Change</th>
+                        <th>Mobile Number</th>
                     </tr>
                 </thead>
                 <tbody>
                     {admins.map((admins, index) => (
                         <tr key={admins._id}>
                             <td>{index + 1}</td>
-                            <td>{admins.adminName}</td>
-                            <td>{admins.adminEmail}</td>
-                            <td>
-                                <button className="btn btn-danger" onClick={() => onDelete(admins._id)}>&nbsp;&nbsp;
-                                    <i className="fa-sharp fa-solid fa-trash"></i>&nbsp;Delete</button>
-                            </td>
+                            <td>{admins.firstname} {admins.lastname}</td>
+                            <td>{admins.email}</td>
+                            <td>{admins.mobilenumber}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -11,8 +11,7 @@ const {
 } = require("../data-access/user.repo");
 const passwordGen = require("generate-password");
 const { sendEmailService } = require("./email.service");
-const { SETTINGS } = require("../constants/commons.settings");
-const config = require("config");
+
 const { log } = require("../util/logger");
 const bcrypt = require("bcrypt");
 const { generateJWT } = require("./token.service");
@@ -36,7 +35,7 @@ const signInUserService = async (password, email, userType) => {
         activateCheck: true,
       };
     }
-    return await validateUser(password, admin, SETTINGS.USERS.ADMIN);
+    return await validateUser(password, admin, process.env.ADMIN_ROLE);
   } catch (e) {
     log.error(e.message || "User not found");
     throw e;
@@ -46,7 +45,7 @@ const signInUserService = async (password, email, userType) => {
 const validateUser = async (password, user, userType) => {
   try {
     const result = await bcrypt.compare(password, user.password);
-    console.log("pw",user.password);
+    console.log("pw", user.password);
     if (!result) {
       throw {
         message: "Invalid User name or Password!",
@@ -91,12 +90,12 @@ const resetUserPasswordService = async (id) => {
     });
     const user = await findOneAndUpdateUserRepo({ _id: id }, { password });
     await sendEmailService(
-      SETTINGS.EMAIL.USER_PASSWORD_RESET,
+      process.env.EMAIL_PASSWORD_RESET,
       {
         name: user.firstname + " " + user.lastname,
         email: user.email,
         password,
-        url: `${config.get("frontEndUrl")}/admin`,
+        url: `${process.env.FRONTEND_URL}/admin`,
       },
       user.email,
       "Password Reset"
@@ -126,12 +125,12 @@ const createUserService = async (data) => {
       data.password = password;
       const user = await createUserRepo(data);
       await sendEmailService(
-        SETTINGS.EMAIL.USER_NEW_PASSWORD_SEND,
+        process.env.EMAIL_USER_NEW_PASSWORD_SEND,
         {
           name: user.firstname + " " + user.lastname,
           email: user.email,
           password,
-          url: `${config.get("frontEndUrl")}/admin`,
+          url: `${process.env.FRONTEND_URL}/admin`,
         },
         user.email,
         `Welcome to Infinity Gift Card`
@@ -161,14 +160,8 @@ const findOneAndUpdateUserService = async (filters, data) => {
 const requestUserPasswordResetService = async (email, userType) => {
   try {
     let user;
-    switch (userType) {
-      case SETTINGS.USERS.ADMIN:
-        user = await findOneUserRepo({ email });
-        break;
-      case SETTINGS.USERS.CUSTOMER:
-        user = await findOneCustomerRepo({ email });
-        break;
-    }
+
+    user = await findOneUserRepo({ email });
 
     if (user) {
       const pwResetData = await createUserPwReset({
@@ -176,11 +169,9 @@ const requestUserPasswordResetService = async (email, userType) => {
         token: uuidv4(),
       });
       await sendEmailService(
-        SETTINGS.EMAIL.PASSWORD_RESET,
+        process.env.EMAIL_PASSWORD_RESET,
         {
-          url: `${config.get("frontEndUrl")}/auth/reset-password/${
-            pwResetData.token
-          }`,
+          url: `${process.env.FRONTEND_URL}/auth/reset-password/${pwResetData.token}`,
           name: user.firstname + " " + user.lastname,
         },
         email,
@@ -238,9 +229,9 @@ const validateAndUpdateUserPwService = async (token, password) => {
     ]);
 
     await sendEmailService(
-      SETTINGS.EMAIL.PASSWORD_CHANGED,
+      process.env.EMAIL_PASSWORD_CHANGED,
       {
-        url: `${config.get("frontEndUrl")}/admin`,
+        url: `${process.env.FRONTEND_URL}/admin`,
         name: user.firstname, // Avoid exposing the password
       },
       user.email,
@@ -253,10 +244,8 @@ const validateAndUpdateUserPwService = async (token, password) => {
   }
 };
 
-
-
 const passwordUpdateRepoCheck = (userId, password) => {
-      return findOneAndUpdateUserRepo({ _id: userId }, { password });
+  return findOneAndUpdateUserRepo({ _id: userId }, { password });
 };
 
 const findAllUsersService = async (data) => {
@@ -286,49 +275,6 @@ const findOneUserByIdService = async (id) => {
   }
 };
 
-const requestCustomerPasswordResetService = async (email, userType) => {
-  try {
-    let user;
-    switch (userType) {
-      case SETTINGS.USERS.ADMIN:
-        user = await findOneUserRepo({ email });
-        break;
-      case SETTINGS.USERS.CUSTOMER:
-        user = await findOneCustomerRepo({ email });
-        break;
-    }
-
-    if (user) {
-      const pwResetData = await createUserPwReset({
-        user: user._id,
-        token: uuidv4(),
-      });
-      await sendEmailService(
-        SETTINGS.EMAIL.PASSWORD_RESET,
-        {
-          url: `${config.get("webSiteUrl")}/auth/reset-password/${
-            pwResetData.token
-          }`,
-          name: user.firstname + " " + user.lastname,
-        },
-        email,
-        "Password Reset"
-      );
-      return {
-        done: true,
-        message: "Password reset link sent to your Email.",
-      };
-    } else {
-      return {
-        done: false,
-        message: "No user was found for this Email.",
-      };
-    }
-  } catch (e) {
-    throw e;
-  }
-};
-
 module.exports = {
   signInUserService,
   logoutUserService,
@@ -342,5 +288,4 @@ module.exports = {
   findAllUsersService,
   getPagedUsersService,
   findOneUserByIdService,
-  requestCustomerPasswordResetService,
 };

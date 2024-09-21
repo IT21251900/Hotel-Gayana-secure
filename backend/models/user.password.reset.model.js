@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 
+const passwordResetTime = process.env.PASSWORD_RESET_TIME || 10; // Default to 10 if not set
+const passwordResetUnit = process.env.PASSWORD_RESET_UNIT || 'minutes'; // Default to 'minutes' if not set
+
 // Define the UserPWReset schema
 const UserPWResetSchema = new Schema({
     user: {
@@ -21,10 +24,7 @@ const UserPWResetSchema = new Schema({
     expiredAt: {
         type: Date,
         default: function() {
-            return moment().add(
-                config.get('auth.passwordReset.time'),
-                config.get('auth.passwordReset.unit')
-            ).toDate();
+            return moment().add(passwordResetTime, passwordResetUnit).toDate();
         },
     },
 });

@@ -36,7 +36,7 @@ const { sendEmail } = require("../controllers/mail");
 router.post("/send-email", sendEmail);
 //admin router
 router.post('/admin/save', createUserController);
-router.get('/admin/get', getAdmins);
+router.get('/admin/get', findAllUsersController);
 router.get('/admin/get/:id', getAdminByID);
 router.put('/admin/update/:id', updateAdmin);
 router.delete('/admin/delete/:id', deleteAdmin);
@@ -158,21 +158,21 @@ router.delete("/Employee/delete/:id",deleteEmployee)
 // Login, Logout & Token Refresh Routes
 router.post('/login', userLoginController);
 router.post('/refresh-token', userRefreshTokenController);
-router.post('/logout', shield.auth(null, SETTINGS.USERS.ADMIN), logoutUserController);
+router.post('/logout', shield.auth(null, process.env.ADMIN_ROLE), logoutUserController);
 
 // Password Management Routes
-router.get('/admin-reset-password/:id', shield.auth(null, SETTINGS.USERS.ADMIN), resetUserPasswordController);
+router.get('/admin-reset-password/:id', shield.auth(null, process.env.ADMIN_ROLE), resetUserPasswordController);
 router.post('/request-reset-password', requestUserPWResetController);
 router.post('/validate-reset-password', validateUserPWResetTokenController);
 router.post('/reset-password', updateUserPasswordController);
 
 // Admin Management Routes
 router.post('/create', createUserController);
-router.put('/update', shield.auth(null, SETTINGS.USERS.ADMIN), findOneAndUpdateUserController);
-router.get('/get-all', shield.auth(null, SETTINGS.USERS.ADMIN), findAllUsersController);
-router.post('/get-paged', shield.auth(null, SETTINGS.USERS.ADMIN), getPagedUsersController);
-router.get('/get-one/:id', shield.auth(null, SETTINGS.USERS.ADMIN), findOneUserByIdController);
-router.post('/change-password', shield.auth(null, SETTINGS.USERS.ADMIN), changeUserPasswordController);
+router.put('/update', shield.auth(null, process.env.ADMIN_ROLE), findOneAndUpdateUserController);
+router.get('/get-all', shield.auth(null, process.env.ADMIN_ROLE), findAllUsersController);
+router.post('/get-paged', shield.auth(null, process.env.ADMIN_ROLE), getPagedUsersController);
+router.get('/get-one/:id', shield.auth(null, process.env.ADMIN_ROLE), findOneUserByIdController);
+router.post('/change-password', shield.auth(null, process.env.ADMIN_ROLE), changeUserPasswordController);
 
 module.exports = { userAuthRouter };
 
