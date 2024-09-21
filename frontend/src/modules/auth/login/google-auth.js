@@ -7,8 +7,7 @@ const GoogleLoginButton = () => {
 
   const responseGoogle = (response) => {
     console.log(response);
-    if (response.profileObj) {
-      // Handle successful login here (e.g., save user info, navigate)
+    if (response) {
       navigate('/adminHome');
     } else {
       console.log('Login failed:', response);
