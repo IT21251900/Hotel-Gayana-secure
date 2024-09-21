@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/auth.service"; // Import the hook
 import FacebookLoginButton from "./facebook-login";
+import GoogleLoginButton from "./google-auth";
 
 const LoginComponent = () => {
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
@@ -168,6 +169,7 @@ const LoginComponent = () => {
                           </button>
                         </div>
                         <FacebookLoginButton></FacebookLoginButton>
+                        <GoogleLoginButton></GoogleLoginButton>
                       </div>
                     </div>
                   </div>
