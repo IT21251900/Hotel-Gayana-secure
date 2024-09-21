@@ -40,26 +40,6 @@ const createVendorRef = async () => {
     return `IV${vendorNo}`;
 };
 
-const createGiftCardRef = async () => {
-    let giftCard = await findLatestGiftCardRepo({
-        'type.name': {
-            $nin: [SETTINGS.GIFT_TYPE.SMART_STANDARD, SETTINGS.GIFT_TYPE.SMART_EXPERIENCE],
-        },
-    });
-    let giftCardNo;
-
-    if (giftCard.length > 0) {
-        giftCardNo = String(Number(giftCard[0]?.refNo?.toString().slice(2)) + 1).padStart(4, '0');
-    } else {
-        giftCardNo = String(1).padStart(4, '0');
-    }
-
-    return `IG${giftCardNo}`;
-};
-
 module.exports = {
     createUserRef,
-    createCustomerRef,
-    createVendorRef,
-    createGiftCardRef,
 };

@@ -24,7 +24,7 @@ const userLoginController = async (req, res) => {
     }
     const email = req.body.email.toLowerCase();
     try {
-        const result = await signInUserService(req.body.password, email, SETTINGS.USERS.ADMIN);
+        const result = await signInUserService(req.body.password, email, process.env.ADMIN_ROLE);
         res.send(result);
     } catch (e) {
         log.error(e);
@@ -40,7 +40,7 @@ const userRefreshTokenController = async (req, res) => {
         return res.status(402).send({ code: 1000, message: "Refresh token not found" });
     } else {
         try {
-            const result = await validateRefreshTokenReq(true, rToken, SETTINGS.USERS.ADMIN);
+            const result = await validateRefreshTokenReq(true, rToken, process.env.ADMIN_ROLE);
             res.send(result);
         } catch (e) {
             log.error(e);

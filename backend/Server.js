@@ -1,9 +1,7 @@
-
+require('dotenv').config();
 const express = require("express")
 const session = require("express-session");
 const mongoose = require("mongoose")
-require("dotenv").config()
-const config = require("./config/default.json")
 const routes = require("./routes/Route")
 const cors = require("cors")
 const helmet = require('helmet');
@@ -12,7 +10,7 @@ const postRoutesmenu = require('./routes/menu');
 const passport = require("passport");
 const authRoute = require("./routes/facebook.route")
 const app = express()
-const PORT = config.server.port || 8000;
+const PORT = process.env.SERVER_PORT || 8000;
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -46,7 +44,7 @@ app.use(helmet.contentSecurityPolicy({
 // MongoDB connection
 (async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL || config.db.path, {
+    await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

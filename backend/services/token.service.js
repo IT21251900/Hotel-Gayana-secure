@@ -1,10 +1,8 @@
-const config = require("config");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const { Types } = require("mongoose");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
-const { SETTINGS } = require("../constants/commons.settings");
 const {
   createUserRefreshTokenRepo,
   findOneAndDeleteUserRefreshTokenRepo,
@@ -33,14 +31,14 @@ const generateJWT = async (user, isRefresh, userType) => {
     delete payload?.role?.permissions;
 
     const signOptions = {
-      issuer: config.get("auth.accessToken.issuer"),
-      expiresIn: config.get("auth.accessToken.expiresIn"),
+      issuer: process.env.ACCESS_TOKEN_ISSUER,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
       algorithm: "RS256",
     };
 
     const filePath = path.join(__dirname, "../config/private.pem");
     const key = fs.readFileSync(filePath, "utf8");
-    const passphrase = config.get("auth.accessToken.passphrase");
+    const passphrase = process.env.ACCESS_TOKEN_PASSPHRASE;
 
     const token = await jwt.sign(payload, { key, passphrase }, signOptions);
     if (!isRefresh) {
@@ -49,8 +47,8 @@ const generateJWT = async (user, isRefresh, userType) => {
       };
 
       const rtSignOptions = {
-        issuer: config.get("auth.refreshToken.issuer"),
-        expiresIn: config.get("auth.refreshToken.expiresIn"),
+        issuer: process.env.REFRESH_TOKEN_ISSUER,
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
       };
 
       await createUserRefreshTokenRepo({
@@ -60,7 +58,7 @@ const generateJWT = async (user, isRefresh, userType) => {
 
       const generatedRToken = await jwt.sign(
         rtPayload,
-        config.get("auth.refreshToken.secret"),
+        process.env.REFRESH_TOKEN_SECRET,
         rtSignOptions
       );
 
@@ -89,10 +87,7 @@ const validateRefreshTokenReq = async (isRefresh, token, userType) => {
     throw { message: "Token not found" };
   }
   try {
-    const data = await jwt.verify(
-      token,
-      config.get("auth.refreshToken.secret")
-    );
+    const data = await jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     const refreshTokenData = await findOneUserRefreshTokenRepo({
       refreshToken: data.refreshToken,
     });
@@ -102,21 +97,14 @@ const validateRefreshTokenReq = async (isRefresh, token, userType) => {
           "Refresh token not found in system. Unable to issue access token",
       };
     }
-    switch (userType) {
-      case SETTINGS.USERS.ADMIN:
-        const user = (
-          await aggregateUserRepo({ _id: new ObjectId(refreshTokenData.user) })
-        )[0];
-        return await generateJWT(user, isRefresh, userType);
-      case SETTINGS.USERS.CUSTOMER:
-        const customer = await findOneCustomerRepo({
-          _id: new ObjectId(refreshTokenData.user),
-        });
-        return await generateJWT(customer, isRefresh, userType);
-    }
+
+    const user = (
+      await aggregateUserRepo({ _id: new ObjectId(refreshTokenData.user) })
+    )[0];
+    return await generateJWT(user, isRefresh, userType);
   } catch (error) {
     const decoded = jwt.decode(token, { complete: true });
-    if (error.message === config.get("auth.refreshToken.errorMessage")) {
+    if (error.message === cprocess.env.REFRESH_TOKEN_ERROR_MESSAGE) {
       await findOneAndDeleteUserRefreshTokenRepo({
         refreshToken: decoded.payload.refreshToken,
       });
