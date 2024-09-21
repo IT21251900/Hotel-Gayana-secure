@@ -26,9 +26,9 @@ export default function AddVehicle() {
       errors["menucat"] = "Please enter the category";
     }
 
-    if (!price) {
+    if (!price || price < 0) {
       formIsValid = false;
-      errors["price"] = "Please enter the price";
+      errors["price"] = "Please enter a valid price";
     }
 
     if (!description) {
@@ -36,9 +36,9 @@ export default function AddVehicle() {
       errors["description"] = "Please enter the description";
     }
 
-    if (!menunumber) {
+    if (!menunumber || menunumber <= 0) {
       formIsValid = false;
-      errors["menunumber"] = "Please enter the menu number";
+      errors["menunumber"] = "Please enter a valid menu number";
     }
 
     setErrors(errors);
@@ -54,7 +54,7 @@ export default function AddVehicle() {
         menucat,
         price,
         description,
-        menunumber
+        menunumber,
       };
 
       axios
@@ -64,8 +64,8 @@ export default function AddVehicle() {
           navigate("/menu/");
         })
         .catch((err) => {
-          console.log('having' + err);
-          setErrorMessage(err.response.data.error);
+          console.log("Error: " + err);
+          setErrorMessage(err.response?.data?.error || "An error occurred");
           setTimeout(() => {
             setErrorMessage(null);
           }, 2000);
@@ -78,34 +78,29 @@ export default function AddVehicle() {
       <div className="dashboard-app">
         <div className="dashboard-content">
           <div className="container m-5">
-            <h1>Add a New mwnu</h1>
+            <h1>Add a New Menu</h1>
             <form onSubmit={sendData}>
-              {/* Vehicle Model */}
+              {/* Menu */}
               <div className="mb-3">
                 <label className="form-label">Menu</label>
                 <input
                   type="text"
                   className={`form-control ${errors.menu ? "is-invalid" : ""}`}
                   placeholder="Enter menu"
-                  name="menu"
-                  onChange={(e) => {
-                    setmenu(e.target.value);
-                  }}
+                  onChange={(e) => setmenu(e.target.value)}
+                  disabled={false} // You can add conditions to disable based on other states
                 />
                 {errors.menu && <div className="invalid-feedback">{errors.menu}</div>}
               </div>
 
-              {/* Category */}
+              {/* Menu Category */}
               <div className="mb-3">
-                <label className="form-label"> Menu Category</label>
+                <label className="form-label">Menu Category</label>
                 <input
                   type="text"
                   className={`form-control ${errors.menucat ? "is-invalid" : ""}`}
                   placeholder="Enter category"
-                  name="menucat"
-                  onChange={(e) => {
-                    setmenucat(e.target.value);
-                  }}
+                  onChange={(e) => setmenucat(e.target.value)}
                 />
                 {errors.menucat && <div className="invalid-feedback">{errors.menucat}</div>}
               </div>
@@ -113,37 +108,29 @@ export default function AddVehicle() {
               {/* Price */}
               <div className="input-group mb-3">
                 <label className="input-group mb-3">Price (Rs.)</label>
-                <span class="input-group-text">Rs. </span>
+                <span className="input-group-text">Rs.</span>
                 <input
                   type="number"
-                  className={`form-control ${errors.price ? "is-invalid"
-                  : ""}`}
-                  aria-label="Amount (to the nearest dollar)"
+                  className={`form-control ${errors.price ? "is-invalid" : ""}`}
                   min="0"
                   step="0.01"
                   placeholder="Enter price"
-                  name="price"
-                  onChange={(e) => {
-                    setprice(e.target.value);
-                  }}
+                  onChange={(e) => setprice(e.target.value)}
                 />
                 {errors.price && <div className="invalid-feedback">{errors.price}</div>}
               </div>
 
-              {/* Enter vehicle Dash No */}
+              {/* Menu No */}
               <div className="mb-3">
-                <label className="form-label">Enter menu NO.</label>
+                <label className="form-label">Enter Menu No.</label>
                 <input
                   type="number"
                   className={`form-control ${errors.menunumber ? "is-invalid" : ""}`}
                   placeholder="Enter menu number"
-                  name="menunumber"
-                  onChange={(e) => {
-                    setmenunumber(e.target.value);
-                  }}
+                  onChange={(e) => setmenunumber(e.target.value)}
                 />
                 {errors.menunumber && <div className="invalid-feedback">{errors.menunumber}</div>}
-                {errorMessage && <div style={{ color: "red" }}>menu no already exists</div>}
+                {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
               </div>
 
               {/* Description */}
@@ -153,16 +140,13 @@ export default function AddVehicle() {
                   className={`form-control ${errors.description ? "is-invalid" : ""}`}
                   rows="3"
                   placeholder="Enter description"
-                  name="description"
-                  onChange={(e) => {
-                    setdescription(e.target.value);
-                  }}
+                  onChange={(e) => setdescription(e.target.value)}
                 />
                 {errors.description && <div className="invalid-feedback">{errors.description}</div>}
               </div>
 
               <br />
-              <input type="submit" className="btn btn-outline-success btn-block mt-4" />
+              <input type="submit" className="btn btn-outline-success btn-block mt-4" disabled={Object.keys(errors).length > 0} />
             </form>
           </div>
         </div>
