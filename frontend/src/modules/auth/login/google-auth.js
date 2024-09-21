@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom';
 const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
-  const handleLogin = (response) => {
-    window.open("http://localhost:3000/googleauth/google", "_self"); 
-    console.log('Login successful:', response);
-    navigate('/adminHome'); 
+  const handleGoogleLogin = (response) => {
+    if (response.accessToken) {
+      console.log('Login successful:', response);
+      navigate('/adminHome'); 
+    } else {
+      console.log('Login failed:', response);
+    }
   };
 
   return (
     <div>
-      <button onClick={handleLogin} className="google-login-button">
+      <button onClick={handleGoogleLogin} className="google-login-button">
         <i className="fa fa-google"></i> Login with Google
       </button>
     </div>
