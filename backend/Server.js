@@ -6,6 +6,7 @@ require("dotenv").config()
 const config = require("./config/default.json")
 const routes = require("./routes/Route")
 const cors = require("cors")
+const helmet = require('helmet');
 
 const postRoutesmenu = require('./routes/menu');
 const passport = require("passport");
@@ -29,6 +30,17 @@ app.use(cors())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", authRoute);
+
+// Use Helmet to set the CSP header
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'"],
+    imgSrc: ["'self'"],
+    styleSrc: ["'self'"],
+    connectSrc: ["'self'"],
+  },
+}));
 
 
 // MongoDB connection
