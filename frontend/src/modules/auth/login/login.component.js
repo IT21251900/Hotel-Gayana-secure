@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/auth.service"; // Import the hook
 import FacebookLoginButton from "./facebook-login";
 import GoogleLoginButton from "./google-auth";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginComponent = () => {
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
@@ -55,6 +56,9 @@ const LoginComponent = () => {
       setBtnLoading(false);
     }
   };
+
+  const [capVal, setCapVal] = useState();
+
   return (
     <section
       className="h-100 gradient-form"
@@ -143,13 +147,14 @@ const LoginComponent = () => {
                                 fontSize: "1rem",
                                 backgroundColor: "#f9f9f9",
                               }}
-                            />
+                            />           
                             <button
                               type="button"
                               onClick={togglePasswordVisibility}
                               className="btn"
                               style={{
                                 marginTop: "0.5rem",
+                                marginBottom: "0.5rem",
                                 padding: "0.25rem 0.5rem",
                                 background: "none",
                                 border: "none",
@@ -162,13 +167,19 @@ const LoginComponent = () => {
                             >
                               {passwordVisible ? "Hide" : "Show"} Password
                             </button>
-                          </div>
+
+                            <ReCAPTCHA
+                              sitekey="6Lf9oUwqAAAAAF-5AL37SSx0UXcUF84dfe44a1Ej"
+                              onChange={(val) => setCapVal(val)}
+                            />                                                     
+
+                          </div>                    
 
                           <div className="text-center pt-1 mb-3 pb-1">
                             <button
                               className="btn btn-primary"
                               type="submit"
-                              disabled={btnLoading}
+                              disabled={btnLoading || !capVal}
                               style={{ width: "100%", padding: "0.75rem" }}
                             >
                               {btnLoading ? "Logging in..." : "Sign In"}
