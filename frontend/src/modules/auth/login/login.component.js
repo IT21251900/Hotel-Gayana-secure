@@ -169,7 +169,7 @@ const LoginComponent = () => {
                             </button>
 
                             <ReCAPTCHA
-                              sitekey="6Lf9oUwqAAAAAF-5AL37SSx0UXcUF84dfe44a1Ej"
+                              sitekey="6LeV3U0qAAAAAC7DXOw3i6hYPMFyOFrGiiQhy0S1"
                               onChange={(val) => setCapVal(val)}
                             />                                                     
 
