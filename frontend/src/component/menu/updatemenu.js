@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -12,6 +12,27 @@ export default function UpdateVehicle() {
   let { id } = useParams();
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
+  const [csrfToken, setCsrfToken] = useState("");
+  const tokenFetched = useRef(false);
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      if (!tokenFetched.current) {
+        // Check if token has been fetched
+        try {
+          const response = await axios.get(
+            "http://localhost:8000/api/csrf-token"
+          );
+          setCsrfToken(response.data.csrfToken);
+          console.log("CSRF Token:", response.data.csrfToken);
+          tokenFetched.current = true; // Set to true after fetching
+        } catch (error) {
+          console.error("Error fetching CSRF token:", error);
+        }
+      }
+    };
+    fetchCsrfToken();
+  }, []);
 
   useEffect(() => {
     const getmenu = async (id) => {
@@ -80,7 +101,12 @@ export default function UpdateVehicle() {
       };
 
       axios
-        .put(`http://localhost:8000/api/menu/update/${id}`, updatedmenu)
+        .put(`http://localhost:8000/api/menu/update/${id}`, updatedmenu,{
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken, // Pass CSRF token here
+          }
+        })
         .then(() => {
           alert("Menu updated");
           navigate("/menu/");

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef  } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,26 @@ export default function AddVehicle() {
   const [description, setdescription] = useState("");
   const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
+  const [csrfToken, setCsrfToken] = useState("");
+  const tokenFetched = useRef(false);
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      if (!tokenFetched.current) { // Check if token has been fetched
+        try {
+          const response = await axios.get("http://localhost:8000/api/csrf-token");
+          setCsrfToken(response.data.csrfToken);
+          console.log("CSRF Token:", response.data.csrfToken);
+          tokenFetched.current = true; // Set to true after fetching
+        } catch (error) {
+          console.error("Error fetching CSRF token:", error);
+        }
+      }
+    };
+
+    fetchCsrfToken();
+  }, []); 
+  
 
   function validateForm() {
     let formIsValid = true;
@@ -58,7 +78,12 @@ export default function AddVehicle() {
       };
 
       axios
-        .post("http://localhost:8000/api/menu/save", newmenu)
+        .post("http://localhost:8000/api/menu/save", newmenu,{
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrfToken
+          }
+        })   
         .then(() => {
           alert("New menu added");
           navigate("/menu/");
@@ -146,7 +171,7 @@ export default function AddVehicle() {
               </div>
 
               <br />
-              <input type="submit" className="btn btn-outline-success btn-block mt-4" disabled={Object.keys(errors).length > 0} />
+              <input type="submit" className="btn btn-outline-success btn-block mt-4" disabled={Object.keys(errors).length > 0|| !csrfToken} />
             </form>
           </div>
         </div>
@@ -154,3 +179,5 @@ export default function AddVehicle() {
     </div>
   );
 }
+
+
